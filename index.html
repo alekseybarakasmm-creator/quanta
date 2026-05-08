@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTA | Финансовая инфраструктура</title>
-    <meta name="description" content="Глобальная платформа для приема платежей, выплат и управления финансами бизнеса.">
+    <title>QUANTA | Финансовая инфраструктура для интернета</title>
     
-    <!-- Шрифты: Inter для идеальной читаемости (как у Stripe/Apple) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -19,12 +17,11 @@
                 extend: {
                     colors: {
                         q: { 
-                            bg: '#000000', 
-                            surface: '#0a0a0a',
-                            border: '#1f1f22',
-                            primary: '#4f46e5', /* Indigo 600 */
-                            secondary: '#7c3aed', /* Indigo 600 */
-                            glow: '#6366f1'
+                            bg: '#f8fafc',
+                            primary: '#4f46e5', /* Indigo */
+                            secondary: '#6366f1', /* Violet-blue */
+                            dark: '#0f172a',
+                            border: '#e2e8f0'
                         }
                     },
                     fontFamily: {
@@ -37,258 +34,274 @@
     </script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; overflow-x: hidden; }
         
-        /* 1. Animated Mesh Gradient Background */
+        /* Glassmorphism Header */
+        .glass-nav { background: rgba(248, 250, 252, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
+
+        /* Animated Mesh Gradient */
         .mesh-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            background-color: #000;
+            position: absolute; top: 0; right: 0; width: 60vw; height: 60vw; z-index: -1;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.15), transparent 25%);
-            filter: blur(60px);
-            animation: mesh-movement 15s ease-in-out infinite alternate;
+                radial-gradient(circle at 30% 30%, rgba(79, 70, 229, 0.15), transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.1), transparent 40%);
+            filter: blur(80px); animation: mesh 10s infinite alternate; transform: translate(20%, -20%);
         }
-        @keyframes mesh-movement {
-            0% { transform: scale(1) translateY(0) rotate(0deg); }
-            50% { transform: scale(1.2) translateY(-20px) rotate(5deg); }
-            100% { transform: scale(1.1) translateY(20px) rotate(-5deg); }
+        @keyframes mesh { 0% { transform: translate(20%, -20%) scale(1); } 100% { transform: translate(15%, -15%) scale(1.1); } }
+
+        /* Кнопки */
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #6366f1); color: white;
+            transition: all 0.3s ease; box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5); }
+
+        /* Текстовый градиент */
+        .text-gradient {
+            background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* 2. Glassmorphism & Borders */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.05), 0 10px 40px -10px rgba(99, 102, 241, 0.1);
-        }
-
-        /* 3. 3D Tilt Effect Utilities */
+        /* 3D Tilt Карточки */
         .tilt-card {
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
-            transition: transform 0.1s ease-out; /* Быстрый возврат, JS делает остальное */
+            background: white; border: 1px solid #e2e8f0; border-radius: 1.5rem;
+            transform-style: preserve-3d; transform: perspective(1000px);
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
-        .tilt-content {
-            transform: translateZ(30px); /* Выдвигаем контент вперед */
+        .tilt-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.15); border-color: rgba(79, 70, 229, 0.3);
         }
+        .tilt-content { transform: translateZ(30px); }
 
-        /* 4. Спец-эффекты */
-        .gradient-text {
-            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Анимированный CSS График (Тот самый) */
+        .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 320px; gap: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; }
+        .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; position: relative; }
+        .bar {
+            width: 100%; max-width: 70px;
+            background: linear-gradient(to top, #4f46e5, #8b5cf6);
+            border-radius: 8px 8px 0 0; height: 0; /* JS меняет высоту */
+            transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3);
         }
-        .btn-glow {
-            position: relative;
-        }
-        .btn-glow::before {
-            content: ''; position: absolute; inset: -2px; z-index: -1;
-            background: linear-gradient(45deg, #4f46e5, #7c3aed, #4f46e5);
-            border-radius: inherit; filter: blur(10px); opacity: 0; transition: opacity 0.3s;
-        }
-        .btn-glow:hover::before { opacity: 0.8; }
+        .bar-val { position: absolute; top: -35px; font-weight: 800; font-size: 1.25rem; color: #0f172a; opacity: 0; transition: opacity 0.5s 1.2s; }
+        .bar-label { margin-top: 1rem; font-weight: 600; color: #64748b; font-size: 0.875rem; text-align: center; }
         
-        .code-block { font-family: 'JetBrains Mono', monospace; }
+        .is-animated .bar { height: var(--h); }
+        .is-animated .bar-val { opacity: 1; }
+
+        /* Анимация появления */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-up.is-visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
-<body class="antialiased selection:bg-q-primary selection:text-white">
+<body class="selection:bg-q-primary selection:text-white">
 
-    <!-- Анимированный фон -->
-    <div class="mesh-bg" aria-hidden="true"></div>
+    <div class="mesh-bg"></div>
 
-    <!-- Навигация -->
-    <nav class="fixed w-full z-50 top-0 border-b border-white/5 bg-black/50 backdrop-blur-xl">
+    <nav class="fixed w-full z-50 top-0 glass-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Лого -->
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-q-primary to-q-secondary flex items-center justify-center shadow-[0_0_15px_rgba(79,70,229,0.5)]">
+            <div class="flex justify-between items-center h-20">
+                <a href="#" class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-q-primary flex items-center justify-center shadow-lg shadow-indigo-500/30">
                         <i class="ph-bold ph-lightning text-white"></i>
                     </div>
-                    <span class="font-bold text-lg tracking-tight">QUANTA</span>
-                </div>
+                    <span class="font-extrabold text-xl tracking-tight text-q-dark">QUANTA</span>
+                </a>
                 
-                <!-- Десктопное меню -->
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="#products" class="text-sm text-gray-400 hover:text-white transition font-medium">Продукты</a>
-                    <a href="#developers" class="text-sm text-gray-400 hover:text-white transition font-medium">Разработчикам</a>
-                    <a href="#pricing" class="text-sm text-gray-400 hover:text-white transition font-medium">Тарифы</a>
+                    <a href="#products" class="text-sm font-semibold text-slate-500 hover:text-q-primary transition">Продукты</a>
+                    <a href="#developers" class="text-sm font-semibold text-slate-500 hover:text-q-primary transition">Разработчикам</a>
+                    <a href="#enterprise" class="text-sm font-semibold text-slate-500 hover:text-q-primary transition">Enterprise</a>
                 </div>
 
-                <!-- Кнопки -->
                 <div class="hidden md:flex items-center gap-4">
-                    <a href="#" class="text-sm font-medium text-gray-300 hover:text-white transition">Войти</a>
-                    <button class="btn-glow bg-white text-black px-4 py-2 rounded-full text-sm font-bold shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:scale-105 transition-transform">
-                        Подключить API
-                    </button>
+                    <button class="text-sm font-semibold text-q-dark hover:text-q-primary transition">Войти</button>
+                    <button class="btn-primary px-5 py-2.5 rounded-full text-sm font-bold">Подключить API</button>
                 </div>
-
-                <!-- Мобильное меню -->
-                <button class="md:hidden text-gray-300"><i class="ph ph-list text-2xl"></i></button>
             </div>
         </div>
     </nav>
 
-    <main class="pt-32 pb-20">
-        <!-- СЕКЦИЯ 1: HERO -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-20 pb-20 text-center flex flex-col items-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-q-primary/30 bg-q-primary/10 text-q-glow text-xs font-semibold mb-8">
-                <span class="w-2 h-2 rounded-full bg-q-glow animate-pulse"></span>
-                Quanta API v2.0 уже доступен
+    <main class="pt-24">
+        
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24 flex flex-col lg:flex-row items-center gap-12">
+            <div class="w-full lg:w-1/2">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-200 bg-indigo-50 text-indigo-700 text-xs font-semibold mb-8">
+                    <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> Quanta v2.0 доступна
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-8 text-q-dark">
+                    Финансовая архитектура для <span class="text-gradient">интернета.</span>
+                </h1>
+                <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-xl">
+                    Миллионы компаний используют API Quanta для приема платежей, осуществления выплат и управления бизнесом онлайн.
+                </p>
+                <div class="flex gap-4">
+                    <button class="btn-primary px-8 py-4 rounded-full font-bold">Начать работу</button>
+                    <button class="bg-white text-q-dark border border-q-border shadow-sm hover:shadow-md px-8 py-4 rounded-full font-semibold transition">Документация</button>
+                </div>
             </div>
-            
-            <h1 class="text-5xl md:text-7xl lg:text-[80px] font-extrabold tracking-tighter leading-[1.05] mb-8 max-w-4xl mx-auto">
-                Финансовая архитектура для <span class="gradient-text">интернета.</span>
-            </h1>
-            
-            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Миллионы компаний — от стартапов до корпораций списка Fortune 500 — используют программное обеспечение и API Quanta для приема платежей, осуществления выплат и управления бизнесом онлайн.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto">
-                <button class="btn-glow bg-white text-black px-8 py-4 rounded-full font-bold text-base hover:scale-105 transition-transform flex items-center justify-center gap-2">
-                    Начать работу <i class="ph-bold ph-arrow-right"></i>
-                </button>
-                <button class="glass-card px-8 py-4 rounded-full font-semibold text-white hover:bg-white/5 transition flex items-center justify-center gap-2">
-                    Документация
-                </button>
+
+            <div class="w-full lg:w-1/2 tilt-card p-6 min-h-[400px] relative overflow-hidden hidden md:block">
+                <div class="tilt-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="font-semibold text-slate-500">Поступления сегодня</div>
+                        <div class="text-green-500 bg-green-50 px-2 py-1 rounded text-xs font-bold">+14.2%</div>
+                    </div>
+                    <div class="text-4xl font-extrabold text-q-dark mb-8">₽ 1,492,050.00</div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i class="ph-bold ph-apple-logo"></i></div>
+                                <div><div class="font-bold text-sm">Apple Pay</div><div class="text-xs text-slate-400">Успешно</div></div>
+                            </div>
+                            <div class="font-bold">+ ₽ 12,500</div>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i class="ph-bold ph-credit-card"></i></div>
+                                <div><div class="font-bold text-sm">Оплата картой</div><div class="text-xs text-slate-400">Успешно</div></div>
+                            </div>
+                            <div class="font-bold">+ ₽ 4,200</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- СЕКЦИЯ 2: BENTO GRID С 3D TILT ЭФФЕКТОМ -->
-        <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Единая экосистема</h2>
-                <p class="text-gray-400 text-lg max-w-2xl">Сверхнадежные инструменты для любой бизнес-модели: SaaS, маркетплейсы, платформы по подписке.</p>
+        <section class="border-y border-q-border bg-white py-10 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center opacity-40 grayscale gap-8">
+                <i class="ph-fill ph-amazon-logo text-4xl"></i>
+                <i class="ph-fill ph-spotify-logo text-4xl"></i>
+                <i class="ph-fill ph-google-logo text-4xl"></i>
+                <i class="ph-fill ph-stripe-logo text-4xl"></i>
+                <i class="ph-fill ph-slack-logo text-4xl"></i>
             </div>
+        </section>
 
-            <!-- Bento Grid -->
+        <section id="products" class="py-24 bg-q-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-16 text-center max-w-3xl mx-auto fade-up">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-q-dark mb-4">Рост конверсии с Quanta</h2>
+                    <p class="text-slate-500 text-lg">Наш эквайринг и умный антифрод увеличивают процент успешных оплат на каждом этапе воронки.</p>
+                </div>
+
+                <div class="chart-container js-chart fade-up max-w-4xl mx-auto">
+                    <div class="bar-wrapper">
+                        <div class="bar" style="--h: 30%; background: #e2e8f0; box-shadow: none;">
+                            <span class="bar-val text-slate-400">68%</span>
+                        </div>
+                        <div class="bar-label">Старый<br>провайдер</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar" style="--h: 60%;">
+                            <span class="bar-val">82%</span>
+                        </div>
+                        <div class="bar-label">Quanta<br>Checkout</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar" style="--h: 85%;">
+                            <span class="bar-val">94%</span>
+                        </div>
+                        <div class="bar-label">+ Radar ML<br>(Антифрод)</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar" style="--h: 100%;">
+                            <span class="bar-val text-gradient" style="font-size: 1.5rem;">99.9%</span>
+                        </div>
+                        <div class="bar-label">Smart<br>Retries</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
                 
-                <!-- Блок 1 (Большой, 2 колонки) -->
-                <div class="tilt-card md:col-span-2 glass-card rounded-3xl p-8 relative overflow-hidden group">
-                    <div class="tilt-content h-full flex flex-col justify-between relative z-10">
-                        <div>
-                            <div class="w-12 h-12 rounded-xl bg-q-primary/20 text-q-glow flex items-center justify-center text-2xl mb-6">
-                                <i class="ph-fill ph-credit-card"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Глобальный эквайринг</h3>
-                            <p class="text-gray-400 max-w-md">Принимайте платежи в 135+ валютах. Автоматическая конвертация, локальные способы оплаты (Apple Pay, Google Pay, Alipay).</p>
-                        </div>
-                        <div class="text-q-glow font-medium flex items-center gap-1 group-hover:gap-2 transition-all">Узнать больше <i class="ph-bold ph-arrow-right"></i></div>
-                    </div>
-                    <!-- Декоративный градиент -->
-                    <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-q-primary/20 rounded-full blur-[50px] group-hover:bg-q-primary/30 transition-colors"></div>
-                </div>
-
-                <!-- Блок 2 (Антифрод) -->
-                <div class="tilt-card glass-card rounded-3xl p-8 relative overflow-hidden group">
-                    <div class="tilt-content h-full flex flex-col justify-between relative z-10">
-                        <div>
-                            <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-2xl mb-6">
-                                <i class="ph-fill ph-shield-check"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Radar ML</h3>
-                            <p class="text-gray-400 text-sm">Блокировка мошенничества на базе машинного обучения.</p>
-                        </div>
+                <div class="tilt-card md:col-span-2 p-8 flex flex-col justify-between group">
+                    <div class="tilt-content">
+                        <div class="w-12 h-12 bg-indigo-50 text-q-primary rounded-xl flex items-center justify-center text-2xl mb-6"><i class="ph-fill ph-globe"></i></div>
+                        <h3 class="text-2xl font-bold mb-2 text-q-dark">Глобальный эквайринг</h3>
+                        <p class="text-slate-500 max-w-md">Принимайте платежи в 135+ валютах. Автоматическая конвертация и локальные способы оплаты.</p>
                     </div>
                 </div>
 
-                <!-- Блок 3 (Подписки) -->
-                <div class="tilt-card glass-card rounded-3xl p-8 relative overflow-hidden group">
-                    <div class="tilt-content h-full flex flex-col justify-between relative z-10">
-                        <div>
-                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mb-6">
-                                <i class="ph-fill ph-arrows-clockwise"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Billing</h3>
-                            <p class="text-gray-400 text-sm">Умная логика рекуррентных платежей и подписок.</p>
-                        </div>
+                <div class="tilt-card p-8 flex flex-col justify-between group">
+                    <div class="tilt-content">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="ph-fill ph-arrows-clockwise"></i></div>
+                        <h3 class="text-xl font-bold mb-2 text-q-dark">Billing</h3>
+                        <p class="text-slate-500 text-sm">Умная логика рекуррентных платежей.</p>
                     </div>
                 </div>
 
-                <!-- Блок 4 (Широкий код) -->
-                <div class="tilt-card md:col-span-2 glass-card rounded-3xl p-8 relative overflow-hidden group flex flex-col md:flex-row items-center gap-8">
-                    <div class="tilt-content flex-1 relative z-10">
-                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mb-6">
-                            <i class="ph-fill ph-code"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">Для разработчиков</h3>
-                        <p class="text-gray-400 mb-6">Чистый API, подробная документация и SDK для всех популярных языков программирования.</p>
-                        <button class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Читать API Docs</button>
+                <div id="developers" class="tilt-card md:col-span-3 bg-q-dark p-8 flex flex-col md:flex-row items-center gap-8 group">
+                    <div class="tilt-content flex-1">
+                        <h3 class="text-3xl font-bold mb-4 text-white">Чистый API</h3>
+                        <p class="text-slate-400 mb-6 max-w-lg">Строго типизированный код, SDK для всех языков и Webhooks с гарантированной доставкой.</p>
+                        <button class="bg-white text-q-dark px-6 py-2 rounded-lg font-bold hover:bg-slate-200 transition">Документация</button>
                     </div>
-                    <!-- Имитация терминала -->
-                    <div class="tilt-content flex-1 bg-black/50 rounded-xl p-4 border border-white/5 w-full shadow-2xl relative z-10">
-                        <div class="flex gap-2 mb-3">
-                            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                    <div class="tilt-content flex-1 w-full bg-black/50 rounded-xl p-6 border border-white/10 font-mono text-sm text-slate-300">
+                        <div class="flex gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div><div class="w-3 h-3 rounded-full bg-yellow-500"></div><div class="w-3 h-3 rounded-full bg-green-500"></div>
                         </div>
-                        <pre class="code-block text-xs text-gray-300 overflow-x-hidden">
-<span class="text-q-glow">const</span> quanta = <span class="text-emerald-400">require</span>('quanta')('sk_test_...');
-
-<span class="text-gray-500">// Создание платежа</span>
-<span class="text-q-glow">const</span> paymentIntent = <span class="text-q-glow">await</span> quanta.paymentIntents.<span class="text-blue-400">create</span>({
-  amount: <span class="text-amber-400">2000</span>,
-  currency: <span class="text-emerald-400">'usd'</span>,
-  automatic_payment_methods: { enabled: <span class="text-rose-400">true</span> },
-});</pre>
+<span class="text-purple-400">const</span> quanta = <span class="text-blue-400">require</span>('quanta')('sk_test_...');
+<span class="text-purple-400">const</span> intent = <span class="text-purple-400">await</span> quanta.payments.<span class="text-blue-400">create</span>({
+  amount: <span class="text-orange-400">2000</span>,
+  currency: <span class="text-green-400">'rub'</span>
+});
                     </div>
                 </div>
 
+            </div>
+        </section>
+
+        <section id="enterprise" class="bg-q-dark text-white py-32 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-q-primary/20 z-0"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <div class="text-q-primary font-bold uppercase tracking-widest text-sm mb-4">Quanta Enterprise</div>
+                <h2 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-8">Абсолютная безопасность</h2>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12">
+                    Инфраструктура сертифицирована по стандарту PCI DSS Level 1. 
+                    Резервирование данных в 3 независимых дата-центрах. Уровень доступности 99.999%.
+                </p>
+                <button class="btn-primary px-8 py-4 rounded-full font-bold text-lg">Связаться с отделом продаж</button>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-white/10 bg-black py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-            <div class="flex items-center gap-2">
-                <i class="ph-fill ph-lightning text-gray-400"></i> QUANTA © 2026
-            </div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-white transition">Статус API</a>
-                <a href="#" class="hover:text-white transition">Документация</a>
-                <a href="#" class="hover:text-white transition">Twitter</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Скрипт 3D Tilt Эффекта -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tiltCards = document.querySelectorAll('.tilt-card');
+            // Анимация появления при скролле
+            const fadeElements = document.querySelectorAll('.fade-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('is-visible');
+                });
+            }, { threshold: 0.1 });
+            fadeElements.forEach(el => observer.observe(el));
 
+            // Триггер для графика
+            const chart = document.querySelector('.js-chart');
+            if(chart) {
+                const chartObs = new IntersectionObserver((entries) => {
+                    if(entries[0].isIntersecting) {
+                        setTimeout(() => chart.classList.add('is-animated'), 300);
+                    }
+                }, { threshold: 0.5 });
+                chartObs.observe(chart);
+            }
+
+            // 3D Tilt Effect
+            const tiltCards = document.querySelectorAll('.tilt-card');
             tiltCards.forEach(card => {
                 card.addEventListener('mousemove', e => {
                     const rect = card.getBoundingClientRect();
-                    // Вычисляем позицию мыши внутри карточки
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    
-                    // Вычисляем центр карточки
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    
-                    // Вычисляем градус наклона (максимум 5 градусов для аккуратности)
-                    const rotateX = ((y - centerY) / centerY) * -5;
-                    const rotateY = ((x - centerX) / centerX) * 5;
-
-                    // Применяем трансформацию: наклон + небольшое увеличение
+                    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -5;
+                    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 5;
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                    
-                    // Динамический блик света (опционально, усложняет логику, но здесь мы делаем фокус на простом 3D)
                 });
-
-                // Возврат в исходное положение при уходе мыши
                 card.addEventListener('mouseleave', () => {
                     card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
                 });
